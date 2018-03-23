@@ -4,7 +4,7 @@
 
 安装扩展
 
-	composer require firstphp/jiayumsg:"1.0"
+	composer require firstphp/jiayumsg:"1.1"
 
 注册服务：
 
