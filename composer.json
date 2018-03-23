@@ -1,0 +1,23 @@
+{
+    "name": "firstphp/jiayumsg",
+    "description": "WEB消息通知服务",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0",
+    "authors": [
+        {
+            "name": "狂奔的蚂蚁",
+            "email": "firstphp@firstphp.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0",
+        "predis/predis": "^1.1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Firstphp\\Jiayumsg\\": "./src"
+        }
+    }
+}
