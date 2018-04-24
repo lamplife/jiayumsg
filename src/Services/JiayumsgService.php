@@ -27,7 +27,7 @@ class JiayumsgService {
         $title = isset($params['title']) && $params['title'] ? htmlspecialchars($params['title']) : '';
         $content = isset($params['content']) && $params['content'] ? htmlspecialchars($params['content']) : '';
         if (empty($title) || empty($content)) {
-            return ['code' => 400, 'message' => '参数错误', 'data' => []];
+            return ['code' => 400, 'msg' => '参数错误', 'data' => []];
         }
 
         DB::beginTransaction();
@@ -44,10 +44,10 @@ class JiayumsgService {
             DB::commit();
         } catch (\Exception $e){
             DB::rollback();
-            return ['code' => 400, 'message' => "SQL错误", 'data' => []];
+            return ['code' => 400, 'msg' => "SQL错误", 'data' => []];
         }
 
-        return ['code' => 200, 'message'=> '操作成功', 'data' => []];
+        return ['code' => 200, 'msg'=> '操作成功', 'data' => []];
 
     }
 
@@ -64,7 +64,7 @@ class JiayumsgService {
         $title = isset($params['title']) && $params['title'] ? htmlspecialchars($params['title']) : '';
         $content = isset($params['content']) && $params['content'] ? htmlspecialchars($params['content']) : '';
         if (empty($noticeId) || empty($title) || empty($content)) {
-            return ['code' => 400, 'message' => '参数错误', 'data' => []];
+            return ['code' => 400, 'msg' => '参数错误', 'data' => []];
         }
 
         DB::beginTransaction();
@@ -79,10 +79,10 @@ class JiayumsgService {
             DB::commit();
         } catch (\Exception $e){
             DB::rollback();
-            return ['code' => 400, 'message' => "SQL错误", 'data' => []];
+            return ['code' => 400, 'msg' => "SQL错误", 'data' => []];
         }
 
-        return ['code' => 200, 'message'=> '操作成功', 'data' => []];
+        return ['code' => 200, 'msg'=> '操作成功', 'data' => []];
 
     }
 
@@ -96,7 +96,7 @@ class JiayumsgService {
     public function delNotice($params = []) {
         $noticeId = isset($params['id']) && $params['id'] ? intval($params['id']) : 0;
         if (empty($noticeId)) {
-            return ['code' => 400, 'message' => '参数错误', 'data' => []];
+            return ['code' => 400, 'msg' => '参数错误', 'data' => []];
         }
 
         $checkNotice = DB::table("notification_system")->where(['id' => $noticeId, 'is_delete' => 0])->first();
@@ -113,10 +113,10 @@ class JiayumsgService {
 
             DB::table("notification_system")->where(['id' => $noticeId, 'is_delete' => 0])->update(['is_delete' => 1]);
         } else {
-            return ['code' => 400, 'message' => 'Hacking Attempt', 'data' => []];
+            return ['code' => 400, 'msg' => 'Hacking Attempt', 'data' => []];
         }
 
-        return ['code' => 200, 'message' => 'success', 'data' => []];
+        return ['code' => 200, 'msg' => 'success', 'data' => []];
 
     }
 
@@ -127,10 +127,9 @@ class JiayumsgService {
      *
      * @author 狂奔的螞蟻 <www.firstphp.com>
      */
-    public function getNotices($params = []) {
-        $userId = isset($params['user_id']) && $params['user_id'] ? intval($params['user_id']) : 0;
+    public function getNotices($params = [], $userId = 0) {
         if (empty($userId)) {
-            return ['code' => 400, 'message' => '参数错误', 'data' => []];
+            return ['code' => 400, 'msg' => '参数错误', 'data' => []];
         }
 
         $unread = 0;
@@ -151,7 +150,7 @@ class JiayumsgService {
             }
         }
 
-        return ['code' => 200, 'message'=> '操作成功', 'data' => ['unread' => $unread]];
+        return ['code' => 200, 'msg'=> '操作成功', 'data' => ['unread' => $unread]];
 
     }
 
@@ -162,13 +161,12 @@ class JiayumsgService {
      *
      * @author 狂奔的螞蟻 <www.firstphp.com>
      */
-    public function getNoticeList($params = []) {
+    public function getNoticeList($params = [], $userId = 0) {
         $offset = isset($params['offset']) && $params['offset'] ? intval($params['offset']) : 0;
         $limit = isset($params['limit']) && $params['limit'] ? intval($params['limit']) : 10;
-        $userId = isset($params['user_id']) && $params['user_id'] ? intval($params['user_id']) : 0;
 
         if (empty($userId)) {
-            return ['code' => 400, 'message' => '参数错误', 'data' => []];
+            return ['code' => 400, 'msg' => '参数错误', 'data' => []];
         }
         $total = DB::table("notification_system")->count();
         $res = DB::table("notification_system")
@@ -201,7 +199,7 @@ class JiayumsgService {
 
         $data = [
             'code' => 200,
-            'message' => '操作成功',
+            'msg' => '操作成功',
             'data' => [
                 'total' => $total,
                 'page' => $offset,
@@ -221,11 +219,10 @@ class JiayumsgService {
      *
      * @author 狂奔的螞蟻 <www.firstphp.com>
      */
-    public function getNoticeDetail($params = []) {
+    public function getNoticeDetail($params = [], $userId = 0) {
         $noticeId = isset($params['id']) && $params['id'] ? intval($params['id']) : 0;
-        $userId = isset($params['user_id']) && $params['user_id'] ? intval($params['user_id']) : 0;
         if (empty($noticeId) || empty($userId)) {
-            return ['code' => 400, 'message' => '参数错误', 'data' => []];
+            return ['code' => 400, 'msg' => '参数错误', 'data' => []];
         }
 
         $info = DB::table("notification_system")->select('id', 'title', 'content', 'created_at')->where('id', $noticeId)->first();
@@ -239,7 +236,7 @@ class JiayumsgService {
             }
         }
 
-        return ['code' => 200, 'message'=> '操作成功', 'data' => $info];
+        return ['code' => 200, 'msg'=> '操作成功', 'data' => $info];
 
     }
 
